@@ -1,0 +1,4 @@
+models/ggml*
+target
+.DS_Store
+.idea
