@@ -4,23 +4,28 @@
 // mkdir -p models
 // wget -O models/ggml-model-q4_0.gguf \
 // https://huggingface.co/TheBloke/LLaMA-2-7B-GGUF/resolve/main/llama-2-7b.Q4_0.gguf
-use llama_cpp::{LlamaModel, LlamaParams, SessionParams};
+// models/llama-2-7b-chat.gguf (Q4_K_M)
+//Llama-2-7B-Chat-GGUF
+// llama-2-7b-chat.Q4_0.gguf
+//mistral-7b-instruct.Q4_0.gguf
+// mistral-7b-instruct.Q4_0.gguf
+//
+// zephyr-7b-alpha.Q4_0.gguf
+//
+// phi-2-instruct.Q4_0.gguf
+
 use llama_cpp::standard_sampler::StandardSampler;
 use anyhow::Result;
 use std::path::Path;
 use std::io::{self, Write};
 
-pub fn infer_local(prompt: &str) -> Result<String> {
-    let model_path = Path::new("models/ggml-model-q4_0.gguf");
-    println!("Loading model from {:?}", model_path);
 
-    let model = LlamaModel::load_from_file(model_path, LlamaParams::default())
-        .expect("Failed to load model");
 
-    println!("Creating session...");
-    let mut session = model.create_session(SessionParams::default())
-        .expect("Failed to create session");
+// pub fn infer_local(prompt: &str) -> Result<String> {
+pub fn infer_local(session: &mut llama_cpp::LlamaSession, prompt: &str) -> Result<String> {
 
+    // session.advance_context(prompt)?;
+    // session.reset();
     println!("Advancing context with prompt...");
     session.advance_context(prompt)?;
 
