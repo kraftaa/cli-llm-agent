@@ -4,6 +4,7 @@
 // mkdir -p models
 // wget -O models/ggml-model-q4_0.gguf \
 // https://huggingface.co/TheBloke/LLaMA-2-7B-GGUF/resolve/main/llama-2-7b.Q4_0.gguf
+// https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.gguf
 // models/llama-2-7b-chat.gguf (Q4_K_M)
 //Llama-2-7B-Chat-GGUF
 // llama-2-7b-chat.Q4_0.gguf
