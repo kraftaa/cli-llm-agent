@@ -20,19 +20,44 @@ use anyhow::Result;
 use std::path::Path;
 use std::io::{self, Write};
 
+pub struct InferenceConfig {
+    pub max_tokens: usize,
+    pub temperature: f32,
+    pub top_k: i32,
+    pub top_p: f32,
+    pub stream: bool,
+}
 
+impl Default for InferenceConfig {
+    fn default() -> Self {
+        Self {
+            max_tokens: 200,
+            temperature: 0.7,
+            top_k: 40,
+            top_p: 0.9,
+            stream: true,
+        }
+    }
+}
 
-// pub fn infer_local(prompt: &str) -> Result<String> {
-pub fn infer_local(session: &mut llama_cpp::LlamaSession, prompt: &str) -> Result<String> {
-
-    // session.advance_context(prompt)?;
-    // session.reset();
+pub fn infer_local(
+    session: &mut llama_cpp::LlamaSession,
+    prompt: &str,
+    // cfg: &InferenceConfig,
+) -> Result<String> {
     println!("Advancing context with prompt...");
     session.advance_context(prompt)?;
 
     println!("Starting completion...");
+
+    let sampler = StandardSampler::default();
+        // .with_temp(cfg.temperature)
+        // .with_top_k(cfg.top_k)
+        // .with_top_p(cfg.top_p);
+
     let mut completions = session
-        .start_completing_with(StandardSampler::default(), 200)
+        // .start_completing_with(sampler, cfg.max_tokens)
+        .start_completing_with(sampler, 200)
         .unwrap()
         .into_strings();
 
@@ -40,11 +65,42 @@ pub fn infer_local(session: &mut llama_cpp::LlamaSession, prompt: &str) -> Resul
 
     for token in completions {
         output.push_str(&token);
-        print!("{token}");
-        io::stdout().flush()?;
+
+        // if cfg.stream {
+            print!("{token}");
+            io::stdout().flush()?;
+        // }
     }
 
-    println!("\nGeneration complete.");
+    // if cfg.stream {
+    //     println!("\nGeneration complete.");
+    // }
 
     Ok(output)
 }
+
+// pub fn infer_local(session: &mut llama_cpp::LlamaSession, prompt: &str) -> Result<String> {
+//
+//     // session.advance_context(prompt)?;
+//     // session.reset();
+//     println!("Advancing context with prompt...");
+//     session.advance_context(prompt)?;
+//
+//     println!("Starting completion...");
+//     let mut completions = session
+//         .start_completing_with(StandardSampler::default(), 200)
+//         .unwrap()
+//         .into_strings();
+//
+//     let mut output = String::new();
+//
+//     for token in completions {
+//         output.push_str(&token);
+//         print!("{token}");
+//         io::stdout().flush()?;
+//     }
+//
+//     println!("\nGeneration complete.");
+//
+//     Ok(output)
+// }

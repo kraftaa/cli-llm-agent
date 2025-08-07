@@ -1,6 +1,6 @@
 use cli_llm_agent::llm;
 // use cli_llm_agent::llm::infer_local;
-
+use cli_llm_agent::llm::InferenceConfig;
 use clap::{Parser, Subcommand};
 use std::fs;
 use anyhow::Result;
@@ -92,7 +92,15 @@ fn run_prompt(session: &mut llama_cpp::LlamaSession, input: &str) -> Result<()> 
         // "Explain this SQL query clearly:\n\n{}\n\nExplanation:",
         input.trim()
     );
+    let cfg = InferenceConfig {
+        max_tokens: 150,
+        temperature: 0.6,
+        top_k: 50,
+        top_p: 0.95,
+        stream: true,
+    };
 
+    // let explanation = llm::infer_local(&mut session, &prompt, &cfg);
     let explanation = llm::infer_local(session, &prompt)?;
 
     let explanation = explanation
@@ -112,7 +120,15 @@ fn run_chat_prompt(session: &mut llama_cpp::LlamaSession, user_input: &str) -> R
         "[INST] You are a helpful assistant. Answer the user politely. [/INST]\nUser: {}\nAssistant:",
         user_input.trim()
     );
+    let cfg = InferenceConfig {
+        max_tokens: 150,
+        temperature: 0.6,
+        top_k: 50,
+        top_p: 0.95,
+        stream: true,
+    };
 
+    // let result = llm::infer_local(&mut session, &prompt, &cfg);
     let response = llm::infer_local(session, &prompt)?;
     println!("\n🤖 {}\n", response.trim());
     Ok(())
@@ -123,7 +139,15 @@ fn run_explain_prompt(session: &mut llama_cpp::LlamaSession, sql: &str) -> Resul
         "[INST] Explain this SQL query in simple English: [/INST]\n```sql\n{}\n```",
         sql.trim()
     );
+    let cfg = InferenceConfig {
+        max_tokens: 150,
+        temperature: 0.6,
+        top_k: 50,
+        top_p: 0.95,
+        stream: true,
+    };
 
+    // let result = llm::infer_local(&mut session, &prompt, &cfg);
     let response = llm::infer_local(session, &prompt)?;
     println!("\n🧠 {}\n", response.trim());
     Ok(())
@@ -131,6 +155,16 @@ fn run_explain_prompt(session: &mut llama_cpp::LlamaSession, sql: &str) -> Resul
 
 fn run_inference(session: &mut llama_cpp::LlamaSession, prompt: &str) {
     println!("🔍 Running inference with prompt:\n{}\n", prompt);
+    // doesn't work
+    let cfg = InferenceConfig {
+        max_tokens: 150,
+        temperature: 0.6,
+        top_k: 50,
+        top_p: 0.95,
+        stream: true,
+    };
+
+    // let result = llm::infer_local(&mut session, &prompt, &cfg);
 
     let result = llm::infer_local(session, &prompt);  //  a call to the existing model
     println!("📤 Result:\n{:?}\n", result);
