@@ -132,6 +132,6 @@ fn run_explain_prompt(session: &mut llama_cpp::LlamaSession, sql: &str) -> Resul
 fn run_inference(session: &mut llama_cpp::LlamaSession, prompt: &str) {
     println!("🔍 Running inference with prompt:\n{}\n", prompt);
 
-    let result = llm::infer_local(session, &prompt);  // Your existing model call here
+    let result = llm::infer_local(session, &prompt);  //  a call to the existing model
     println!("📤 Result:\n{:?}\n", result);
 }
