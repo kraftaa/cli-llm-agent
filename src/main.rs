@@ -32,6 +32,11 @@ use std::io::{self, Write};
 #[tokio::main]
 async fn main() -> Result<()> {
     // let model_path = Path::new("models/ggml-model-q4_0.gguf");
+    // I think for remote provider something like that , will try
+    // let provider = OpenAIProvider::from_env();
+    // let model = Builder::new(provider).completion_model("gpt-3.5-turbo")?;
+    // let resp = model.complete(prompt, Default::default()).await?;
+    // Ok(resp.text)
     let model_path = Path::new("models/llama-2-7b-chat.Q4_0.gguf");
     println!("🔍 Loading model from {:?}", model_path);
 
